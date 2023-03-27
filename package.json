@@ -1,6 +1,6 @@
 {
   "name": "@map_side/uv-poll",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "It's like UV_POLL_T but javascript",
   "main": "poller.js",
   "scripts": {
@@ -18,6 +18,7 @@
   "homepage": "https://github.com/hojin-jeong/uv-poll#readme",
   "dependencies": {
     "bindings": "^1.5.0",
+    "debug": "^4.3.4",
     "nan": "^2.17.0"
   },
   "devDependencies": {

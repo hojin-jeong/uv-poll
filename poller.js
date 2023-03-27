@@ -1,5 +1,7 @@
 'use strict';
-const EventEmitter = require('events')
+
+const Debug         = require('debug')('@map_side/uv-poll')
+const EventEmitter  = require('events')
 const PollerBinding = require('bindings')('poller.node').Poller
 
 /**
@@ -13,34 +15,36 @@ module.exports = class Poller extends EventEmitter {
   }
 
   constructor(fd) {
-    console.debug('Creating poller')
+    Debug('Creating poller')
     super()
 
     this.poller = new PollerBinding(fd, this.$_handleEvent.bind(this))
     this.poller.start()
+
+    Debug('Poller started')
   }
 
   $_handleEvent(err, flag) {
     if (err) {
-      console.debug('error', err)
+      Debug('error', err)
       return this.emit('error', err)
     }
     if (flag & Poller.EVENTS.UV_READABLE) {
-      console.debug('received "readable"')
+      Debug('received "readable"')
       this.emit('readable', null)
     }
     if (flag & Poller.EVENTS.UV_WRITABLE) {
-      console.debug('received "writable"')
+      Debug('received "writable"')
       this.emit('writable', null)
     }
     if (flag & Poller.EVENTS.UV_DISCONNECT) {
-      console.debug('received "disconnect"')
+      Debug('received "disconnect"')
       this.emit('disconnect', null)
     }
   }
 
   stop() {
-    console.debug('Stopping poller')
+    Debug('Stopping poller')
     this.poller.stop()
     this.emitCanceled()
   }
