@@ -16,8 +16,11 @@ changelog.md
 .DS_Store
 
 # MIRRORED FROM .gitignore PLEASE MAINTAIN
+.idea/
+.run/
 build/
 node_modules
 npm-debug.log
-coverage
-.mailmap
+package-lock.json
+yarn.lock
+yarn-error.log

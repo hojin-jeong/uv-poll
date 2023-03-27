@@ -62,9 +62,6 @@ void Poller::onData(uv_poll_t* handle, int status, int events) {
     argv[0] = Nan::Null();
     argv[1] = Nan::New<v8::Integer>(events);
   }
-  // remove triggered events from the poll
-  int newEvents = obj->events & ~events;
-  obj->poll(newEvents);
 
   obj->callback.Call(2, argv);
 }
@@ -74,7 +71,7 @@ NAN_MODULE_INIT(Poller::Init) {
   tpl->SetClassName(Nan::New("Poller").ToLocalChecked());
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
-  Nan::SetPrototypeMethod(tpl, "poll", poll);
+  Nan::SetPrototypeMethod(tpl, "start", start);
   Nan::SetPrototypeMethod(tpl, "stop", stop);
 
   constructor().Reset(Nan::GetFunction(tpl).ToLocalChecked());
@@ -108,14 +105,9 @@ NAN_METHOD(Poller::New) {
   info.GetReturnValue().Set(info.This());
 }
 
-NAN_METHOD(Poller::poll) {
+NAN_METHOD(Poller::start) {
   Poller* obj = Nan::ObjectWrap::Unwrap<Poller>(info.Holder());
-  if (!info[0]->IsInt32()) {
-    Nan::ThrowTypeError("events must be an int");
-    return;
-  }
-  int events = Nan::To<int>(info[0]).FromJust();
-  obj->poll(events);
+  obj->poll(UV_READABLE | UV_WRITABLE | UV_DISCONNECT);
 }
 
 NAN_METHOD(Poller::stop) {
