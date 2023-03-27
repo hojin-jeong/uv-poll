@@ -1,4 +1,4 @@
-# @mapside/uv-poll
+# @map_side/uv-poll
 It's UV_POLL_T for nodejs
 
 It's an event emitter wrapper for [libuv's UV_POLL_T struct](http://docs.libuv.org/en/v1.x/poll.html).
